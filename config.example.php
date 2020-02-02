@@ -43,7 +43,7 @@ $config = [
         "enabled" => true, //Shows/hides quests-stats page
       ],
       "lorgnette" => [
-        "enabled" => true, //Shows/hides lorgnette page
+        "enabled" => false, //Shows/hides lorgnette page
       ]
     ],
     "navBarIconSize" => [24, 24] //NavBar image icon size e.g. [Width, Height]
