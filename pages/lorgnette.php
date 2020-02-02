@@ -293,7 +293,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 						<span class='list-group-item bold' style='border: 1px solid white;'>
 							<h4 class='list-group-item-heading'>
 								<img style='margin-right:5px;' src='static/images/xpstop.png' width='50' height='50' /> 
-								<span data-i18n='lorgnette_averages_spinsegg' >Spins per Egg</span>
+								<span data-i18n='lorgnette_averages_xps' >XP per Stop</span>
 								: " . round($averages["XPS"] / $resultAmount) . "
 							</h4>
 						</span>
