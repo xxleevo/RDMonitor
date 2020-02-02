@@ -51,13 +51,15 @@
 	"lorgnette_table_device": "Device",
 	"lorgnette_table_duration": "Duration",
 	"lorgnette_table_total_xp": "Total XP",
-	"lorgnette_table_xp_per_hour": "XP/Hour",
+	"lorgnette_table_xp_per_hour": "XP/Hr",
 	"lorgnette_table_spins": "Spins",
-	"lorgnette_table_spins_per_hour": "Spins/Hour",
+	"lorgnette_table_spins_per_hour": "Spins/Hr",
 	"lorgnette_table_spins_per_egg": "Spins/Egg",
 	"lorgnette_table_xp_per_spin": "XP/Spin",
 	"lorgnette_table_route": "Route",
 	"lorgnette_table_user": "User",
 	"lorgnette_table_updated": "Updated",
-	"lorgnette_table_status": "Status"
+	"lorgnette_table_status": "Status",
+	"lorgnette_table_estimated_finish": "Est. Finish",
+	"lorgnette_table_estimated_total": "Est. Time"
 }

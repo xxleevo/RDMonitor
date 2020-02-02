@@ -59,5 +59,7 @@
 	"lorgnette_table_route": "Route",
 	"lorgnette_table_user": "Nutzer",
 	"lorgnette_table_updated": "Updated",
-	"lorgnette_table_status": "Status"
+	"lorgnette_table_status": "Status",
+	"lorgnette_table_estimated_finish": "Fertig in(~)",
+	"lorgnette_table_estimated_total": "Zeit(~)"
 }

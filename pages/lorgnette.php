@@ -96,15 +96,16 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 					<tr class='text-nowrap'>
 						<th data-i18n='lorgnette_table_level' class='level'>Level</th>
 						<th data-i18n='lorgnette_table_device' class='device'>Device</th>
-						<th data-i18n='lorgnette_table_duration' class='hour'>Duration</th>
 						<th data-i18n='lorgnette_table_total_xp' class='xp'>Total XP</th>
-						<th data-i18n='lorgnette_table_xp_per_hour' class='xph'>XP/h</th>
+						<th data-i18n='lorgnette_table_xp_per_hour' class='xph'>XP/Hr</th>
 						<th data-i18n='lorgnette_table_spins' class='spins'>Spins</th>
-						<th data-i18n='lorgnette_table_spins_per_hour' class='spinshour'>Spins/h</th>
+						<th data-i18n='lorgnette_table_spins_per_hour' class='spinshour'>Spins/Hr</th>
 						<th data-i18n='lorgnette_table_xp_per_spin' class='xpspins'>XP/Spin</th>
 						<th data-i18n='lorgnette_table_route' class='route'>Route</th>
 						<th data-i18n='lorgnette_table_user' class='username'>User</th>
-						<th data-i18n='lorgnette_table_updated' class='updated'>Updated</th>
+						<th data-i18n='lorgnette_table_duration' class='hour'>Duration</th>
+						<th data-i18n='lorgnette_table_estimated_finish' class='hour'>Est. Finish</th>
+						<th data-i18n='lorgnette_table_estimated_total' class='hour'>Est. Time</th>
 						<th data-i18n='lorgnette_table_status' class='status'>Status</th>
 					</tr>
 				</thead>";
@@ -117,28 +118,42 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			$spins = $row['spins'];
 			$device_id = $row['device_id'];
 			$route = $row['route'];
-			$xp = $row['xp'];
-			$hour = floor($row['hour']);
-			$xph = round($xp / $row['hour']);
-			$avg_xp_stop = round($xp / $spins);
-			$minute = ($row['hour']*60)%60;
 			$updated = $row['updated'];
+			$hour = floor($row['hour']);
+			$minute = ($row['hour']*60)%60;
 			$status = get_status($row['online'], $sqlType);
 			$spinsPerHour = round($spins / $row['hour']);
+			
+			$xp = $row['xp'];
+			$xph = round(($xp / $row['hour'])/1000,1);
+			$avg_xp_stop = round($xp / $spins);
+			
+			//Estimates
+			$xpNeeded = 2000000;
+			$estXpPerHour = ($xp / $row['hour']);
+			
+			$estFinish = ($xpNeeded - $xp)/($estXpPerHour);
+			$estFinishHours = floor($estFinish);
+			$estFinishMinutes = ($estFinish*60)%60;
+			
+			$estTime = $row['hour'] + $estFinish;
+			$estTimeHours = floor($estTime);
+			$estTimeMinutes = ($estTime*60)%60;
 			//Build Table
 			echo "
 				<tr class='text-nowrap'>
 					<td data-title='level'>" . $level . "</td>
 					<td data-title='device'>" . $device . "</td>
-					<td data-title='hour'>" . $hour . "h " .  $minute  ."m" ."</td>
 					<td data-title='xp'>" . $xp . "</td>
-					<td data-title='xph'>" . $xph . "</td>
+					<td data-title='xph'>" . $xph . "K</td>
 					<td data-title='spins'>" . $spins . "</td>
 					<td data-title='spinshour'>" . $spinsPerHour . "</td>
 					<td data-title='xpspins'>" . $avg_xp_stop . "</td>
 					<td data-title='route'>" . $route . "</td>
 					<td data-title='username'>" . $username . "</td>
-					<td data-title='updated'>" . $updated . "</td>
+					<td data-title='hour'>" . $hour . "h " .  $minute  ."m" ."</td>
+					<td data-title='estfinish'>" .$estFinishHours . "h " .  $estFinishMinutes  ."m" ."</td>
+					<td data-title='esttime'>" . $estTimeHours . "h " . $estTimeMinutes . "m" . "</td>
 					<td data-title='status'>" . $status . "</td>
 				</tr>
 			";
