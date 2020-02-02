@@ -1,0 +1,29 @@
+/*@media only screen and (max-width: 800px) {*/
+  .small {
+    border-style: none;
+    font-size: smaller;
+  }
+  .small-header {
+    background: black;
+    border-style: none;
+    color: white;
+    font-size: smaller;
+  }
+
+  #gym-table {
+    -webkit-overflow-scrolling: auto;
+    overflow: auto;
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+
+/*html { overflow: auto; overflow-y: auto; overflow-x: auto; }*/
+/*}*/
+
+.row.mobile-row {
+    margin-bottom: 20px;
+}
+
+.hiddenRow {
+  padding: 0 !important;
+}
