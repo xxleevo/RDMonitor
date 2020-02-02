@@ -32,10 +32,10 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 		</div>
 	</div>
 
-	<div class='row mb-4'>
+	<div class='row mb-4 mt-2'>
 
 		<div class='col-md-3'>
-			<span class='list-group-item bold'>
+			<span class='list-group-item bold' style='border: 1px solid white;'>
 				<h4 class='list-group-item-heading'>
 					<img style='margin-right:5px;' src='static/images/online.png' width='50' height='50' /> 
 					<span data-i18n='lorgnette_active_devices' >Active Devices</span>
@@ -44,7 +44,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			</span>
 		</div>
 		<div class='col-md-3'>
-			<span class='list-group-item bold'>
+			<span class='list-group-item bold' style='border: 1px solid white;'>
 				<h4 class='list-group-item-heading'>
 					<img style='margin-right:5px;' src='static/images/lowlevel.png' width='50' height='50' /> 
 					<span data-i18n='lorgnette_lowlevel_accounts' >L0-1 Pool</span>
@@ -53,7 +53,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			</span>
 		</div>
 		<div class='col-md-3'>
-			<span class='list-group-item bold'>
+			<span class='list-group-item bold' style='border: 1px solid white;'>
 				<h4 class='list-group-item-heading'>
 					<img style='margin-right:5px;' src='static/images/midlevel.png' width='50' height='50' /> 
 					<span data-i18n='lorgnette_midlevel_accounts' >L2-29 Pool</span>
@@ -62,7 +62,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			</span>
 		</div>
 		<div class='col-md-3'>
-			<span class='list-group-item bold'>
+			<span class='list-group-item bold' style='border: 1px solid white;'>
 				<h4 class='list-group-item-heading'>
 					<img style='margin-right:5px;' src='static/images/highlevel.png' width='50' height='50' /> 
 					<span data-i18n='lorgnette_highlevel_accounts' >L30 Pool</span>
@@ -229,8 +229,96 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			</div>
 		</div>";
 		
-		echo "<div id='no-more-tables'>
-			<table id='quest-table' class='table table-dark table-striped' border='1'>
+		
+		echo "<div style='border: 1px solid white;border-top:none;'>";
+			$result = get_lorgnette_accounts($sqlType, $pdo, 'done');
+			$averages = [];
+			if(sizeOf($result) > 1){
+				$showAverages = true;
+				$resultAmount = sizeOf($result);
+				//Set Averages to 0 first
+				$averages["XPH"] = 0;
+				$averages["Spins"] = 0;
+				$averages["SpinsPerEgg"] = 0;
+				$averages["Duration"] = 0;
+				$averages["XPS"] = 0;
+				$averages["XPS"] = 0;
+			} else{
+				$showAverages = false;
+			}
+			foreach($result as $row){
+				//Build Averages
+				$averages["XPH"] += $row['xp'] / $row['hour'];
+				$averages["Duration"] += $row['hour'];
+				$averages["Spins"] += $row['spins'];
+				$averages["SpinsPerEgg"] += round((($row['xp'] - ($row['spins'] * 250)) /250)/getEggAmount($row['level']));
+				$averages["XPS"] += $row['xp'] / $row['spins'];
+			}
+			//Print Averages
+			if($showAverages){
+				echo "
+				<div class='text-center dark text-light p-1' style='font-size:28px;'>
+					<u><span data-i18n='lorgnette_averages_header' >Average Data</span></u>
+				</div>
+					
+				<div class='row m-2 p-2 mb-3'>
+					<div class='col-md-3'>
+						<span class='list-group-item bold' style='border: 1px solid white;'>
+							<h4 class='list-group-item-heading'>
+								<img style='margin-right:5px;' src='static/images/xp.png' width='50' height='50' /> 
+								<span data-i18n='lorgnette_averages_xph' >XP/Hr</span>
+								: " . round((($averages["XPH"] / $resultAmount)/1000),1) . "K
+							</h4>
+						</span>
+					</div>
+					<div class='col-md-3'>
+						<span class='list-group-item bold' style='border: 1px solid white;'>
+							<h4 class='list-group-item-heading'>
+								<img style='margin-right:5px;' src='static/images/spins.png' width='50' height='50' /> 
+								<span data-i18n='lorgnette_averages_spins' >Spins</span>
+								: " . round($averages["Spins"] / $resultAmount) . "
+							</h4>
+						</span>
+					</div>
+					<div class='col-md-3'>
+						<span class='list-group-item bold' style='border: 1px solid white;'>
+							<h4 class='list-group-item-heading'>
+								<img style='margin-right:5px;' src='static/images/egg.png' width='50' height='50' /> 
+								<span data-i18n='lorgnette_averages_spinsegg' >Spins per Egg</span>
+								: " . round($averages["SpinsPerEgg"] / $resultAmount) . "
+							</h4>
+						</span>
+					</div>
+					<div class='col-md-3'>
+						<span class='list-group-item bold' style='border: 1px solid white;'>
+							<h4 class='list-group-item-heading'>
+								<img style='margin-right:5px;' src='static/images/xpstop.png' width='50' height='50' /> 
+								<span data-i18n='lorgnette_averages_spinsegg' >Spins per Egg</span>
+								: " . round($averages["XPS"] / $resultAmount) . "
+							</h4>
+						</span>
+					</div>
+					<!-- ### Second Row ###-->
+					<div class='col-md-3'>
+					</div>
+					<div class='col-md-6 mt-3'>
+						<span class='list-group-item bold' style='border: 1px solid white;'>
+							<div class='list-group-item-heading text-center' style='font-size:1.5em'>
+								<img style='margin-right:5px;' src='static/images/duration.png' width='64' height='64' /> 
+								<span data-i18n='lorgnette_averages_duration' >Duration</span>
+								: " . floor($averages["Duration"] / $resultAmount) . "h " . ((($averages["Duration"] / $resultAmount)*60)%60) . "m
+							</div>
+						</span>
+					</div>
+					<div class='col-md-3'>
+					</div>
+				</div>";
+			}
+		echo "
+		</div>
+		
+		<div id='no-more-tables'>
+			<table id='quest-table' class='table table-dark table-striped mb-0' border='1'>
 				<thead class='thead-dark'>
 					<tr class='text-nowrap'>
 						<th data-i18n='lorgnette_table_level' class='level'>Level</th>
@@ -244,8 +332,6 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 						<th data-i18n='lorgnette_table_updated' class='updated'>Updated</th>
 					</tr>
 				</thead>";
-				
-		$result = get_lorgnette_accounts($sqlType, $pdo, 'done');
 		foreach($result as $row){
 			$username = substr($row['username'], 0, 6) . "...";
 			$level = $row['level']; 
@@ -260,6 +346,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			$updated = $row['updated'];
 			$eggsGot = getEggAmount($level);
 			$spinsPerEgg = round((($xp - ($spins * 250)) /250)/$eggsGot);
+			
 			//Build Table
 			echo "
 				<tr class='text-nowrap'>

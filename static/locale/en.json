@@ -61,5 +61,11 @@
 	"lorgnette_table_updated": "Updated",
 	"lorgnette_table_status": "Status",
 	"lorgnette_table_estimated_finish": "Est. Finish",
-	"lorgnette_table_estimated_total": "Est. Time"
+	"lorgnette_table_estimated_total": "Est. Time",
+	"lorgnette_averages_header" : "Average Data",
+	"lorgnette_averages_xph" : "XP/Hr",
+	"lorgnette_averages_duration" : "Duration",
+	"lorgnette_averages_spins" : "Spins",
+	"lorgnette_averages_spinsegg" : "Spins/Egg",
+	"lorgnette_averages_xps" : "XP/Spin"
 }

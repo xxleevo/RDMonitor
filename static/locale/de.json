@@ -62,4 +62,10 @@
 	"lorgnette_table_status": "Status",
 	"lorgnette_table_estimated_finish": "Fertig in(~)",
 	"lorgnette_table_estimated_total": "Zeit(~)"
+	"lorgnette_averages_header" : "Durchschn. Daten",
+	"lorgnette_averages_xph" : "XP/Std",
+	"lorgnette_averages_duration" : "Dauer",
+	"lorgnette_averages_spins" : "Spins",
+	"lorgnette_averages_spinsegg" : "Spins/Ei",
+	"lorgnette_averages_xps" : "XP/Spin"
 }
