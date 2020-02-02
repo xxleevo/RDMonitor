@@ -246,19 +246,38 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			} else{
 				$showAverages = false;
 			}
+			if($config['ui']['pages']['lorgnette']['highLevelAverageLimitTime'] !== null && $config['ui']['pages']['lorgnette']['highLevelAverageLimitTime']){
+				$resultAmount = 0;
+				$includeTime = $config['ui']['pages']['lorgnette']['l30AverageIncludeTime'];
+				$durationString = "(<span data-i18n='lorgnette_lasthours_1'>Last</span> " . $includeTime . " <span data-i18n='lorgnette_lasthours_2'>Hours</span>)";
+				$now = date_timestamp_get(date_create());
+			} else{
+				$durationString = "";
+			}
 			foreach($result as $row){
 				//Build Averages
-				$averages["XPH"] += $row['xp'] / $row['hour'];
-				$averages["Duration"] += $row['hour'];
-				$averages["Spins"] += $row['spins'];
-				$averages["SpinsPerEgg"] += round((($row['xp'] - ($row['spins'] * 250)) /250)/getEggAmount($row['level']));
-				$averages["XPS"] += $row['xp'] / $row['spins'];
+				if($config['ui']['pages']['lorgnette']['highLevelAverageLimitTime'] !== null && $config['ui']['pages']['lorgnette']['highLevelAverageLimitTime']){
+					if(($now - $row['logout']) <= $includeTime*3600){
+						$averages["XPH"] += $row['xp'] / $row['hour'];
+						$averages["Duration"] += $row['hour'];
+						$averages["Spins"] += $row['spins'];
+						$averages["SpinsPerEgg"] += round((($row['xp'] - ($row['spins'] * 250)) /250)/getEggAmount($row['level']));
+						$averages["XPS"] += $row['xp'] / $row['spins'];
+						$resultAmount++;
+					}
+				}else{
+					$averages["XPH"] += $row['xp'] / $row['hour'];
+					$averages["Duration"] += $row['hour'];
+					$averages["Spins"] += $row['spins'];
+					$averages["SpinsPerEgg"] += round((($row['xp'] - ($row['spins'] * 250)) /250)/getEggAmount($row['level']));
+					$averages["XPS"] += $row['xp'] / $row['spins'];
+				}
 			}
 			//Print Averages
 			if($showAverages){
 				echo "
 				<div class='text-center dark text-light p-1' style='font-size:28px;'>
-					<u><span data-i18n='lorgnette_averages_header' >Average Data</span></u>
+					<u><span data-i18n='lorgnette_averages_header' >Average Data</span> " . $durationString . "</u>
 				</div>
 					
 				<div class='row m-2 p-2 mb-3'>

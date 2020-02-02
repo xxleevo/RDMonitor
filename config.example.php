@@ -44,6 +44,8 @@ $config = [
       ],
       "lorgnette" => [
         "enabled" => false, //Shows/hides lorgnette page
+        "highLevelAverageLimitTime" => false, // If enabled, the below number will give the Timeframe which accounts will be used for the average calculations
+		"l30AverageIncludeTime" => 24 // All Done 30's within that amount(hours) are included in the average data (if the above is true)
       ]
     ],
     "navBarIconSize" => [24, 24] //NavBar image icon size e.g. [Width, Height]

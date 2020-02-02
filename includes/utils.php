@@ -64,6 +64,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 				total_exp as xp, 
 				round((updated-login)/3600.0, 2) as hour,
 				to_timestamp(updated) as updated,
+				logout,
 				updated > extract(epoch from now() - INTERVAL '5 minute') as online
 			FROM 
 			accounts
@@ -83,6 +84,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 			$data[$i]["hour"] = $row["hour"];
 			$data[$i]["updated"] = $row["updated"];
 			$data[$i]["online"] = $row["online"];
+			$data[$i]["logout"] = $row["logout"];
 			$i++;
 		}
 		// Free result set
@@ -114,6 +116,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 					total_exp as xp, 
 					round((updated-login)/3600.0, 2) as hour, 
 					FROM_UNIXTIME(updated) as updated,
+					logout,
 					updated > UNIX_TIMESTAMP(NOW() - INTERVAL 5 MINUTE) as online
 				FROM accounts 
 			$conds
@@ -133,6 +136,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 					$data[$i]["hour"] = $row["hour"];
 					$data[$i]["updated"] = $row["updated"];
 					$data[$i]["online"] = $row["online"];
+					$data[$i]["logout"] = $row["logout"];
 					$i++;
 				}
 				// Free result set

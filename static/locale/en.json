@@ -67,5 +67,7 @@
 	"lorgnette_averages_duration" : "Duration",
 	"lorgnette_averages_spins": "Spins",
 	"lorgnette_averages_spinsegg": "Spins/Egg",
-	"lorgnette_averages_xps": "XP/Spin"
+	"lorgnette_averages_xps": "XP/Spin",
+	"lorgnette_lasthours_1": "Last",
+	"lorgnette_lasthours_2": "Hours"
 }
