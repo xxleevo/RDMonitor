@@ -65,6 +65,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 				round((updated-login)/3600.0, 2) as hour,
 				to_timestamp(updated) as updated,
 				logout,
+				reason as failed,
 				updated > extract(epoch from now() - INTERVAL '5 minute') as online
 			FROM 
 			accounts

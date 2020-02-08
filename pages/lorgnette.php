@@ -23,7 +23,28 @@ $LLs = $account_state["ll"];
 $LMids = $account_state["ml"];
 $active_devices = $account_state["active"];
 
-
+echo "<div class='modal fade' id='explainStatusModal' tabindex='-1' role='dialog' aria-labelledby='explainStatusModalLabel' aria-hidden='true'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='explainStatusModalLabel'>Account Status</h5>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class='modal-body'>
+        <b><u>1st</u> Indicator: Account Status</b><br>
+		<font color='green'>Green</font>: The account is fine.<br>
+		<font color='orange'>Yellow</font>: The account has a warning<br>
+		<font color='red'>Red</font>: The account failed (ban or invalid cred)<br>
+		<br>
+		<b><u>2nd</u> Indicator: Cooldown Status</b><br>
+		<font color='green'>Green</font>: The account logged out more than 2h before now<br>
+		<font color='red'>Red</font>: The account logged less than 2h before now
+      </div>
+    </div>
+  </div>
+</div>";
 // Write all Data
 echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !important;'>
 	<div class='card text-center my-1 m-6'>
@@ -350,6 +371,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 						<th data-i18n='lorgnette_table_user' class='username'>User</th>
 						<th data-i18n='lorgnette_table_updated' class='updated'>Updated</th>
 						<th data-i18n='lorgnette_table_transfer_level30' class='transfer'>Transfer to RDM</th>
+						<th class='status'>Status <button type='button' class='btn explain' data-toggle='modal' data-target='#explainStatusModal'>?</button></th>
 					</tr>
 				</thead>";
 		foreach($result as $row){
@@ -367,6 +389,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			$updated = $row['updated'];
 			$eggsGot = getEggAmount($level);
 			$spinsPerEgg = round((($xp - ($spins * 250)) /250)/$eggsGot);
+			$accountStatus = getAccountStatus($row['failed'], $row['logout']);
 			
 			//Build Table
 			echo "
@@ -381,6 +404,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 					<td data-title='username'>" . $username . "</td>
 					<td data-title='updated'>" . $updated . "</td>
 					<td  class='text-center' data-title='transfer'><button class='btn btn-secondary' onclick='doSomething(\"" . $usernameFull . "\", this);'>Transfer</button></td>
+					<td data-title='status'><center>" . $accountStatus . "</center></td>
 				</tr>
 			";
 		}
@@ -397,6 +421,22 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 	
 echo "</div>";
 
+function getAccountStatus($failed, $logout){
+	if($failed == "banned" || $failed == "invalid_cred"){
+		$statusFailed = "<img src='./static/images/offline.png' width='24' height='auto' style='margin-right:5px;' />";
+	} else if($failed == "warning"){
+		$statusFailed = "<img src='./static/images/unstable.png' width='24' height='auto' style='margin-right:5px;' />";
+	} else{
+		$statusFailed = "<img src='./static/images/online.png' width='24' height='auto' style='margin-right:5px;' />";
+	}
+	$now = new DateTime();
+	if($logout > strtotime("-2 hour")){
+		$statusCooldown = "<img src='./static/images/offline.png' width='24' height='auto' style='margin-left:5px;' />";
+	} else if($logout < strtotime("-2 hour")){
+		$statusCooldown = "<img src='./static/images/online.png' width='24' height='auto' style='margin-left:5px;' />";
+	}
+	return $statusFailed . $statusCooldown;
+}
 
 function get_status($status, $sqlType){
 	if($sqlType == 'mysql'){

@@ -1,0 +1,21 @@
+.modal-loader .modal-dialog{
+  display: table;
+  position: relative;
+  margin: 0 auto;
+  top: calc(50% - 24px);
+}
+
+.modal-loader .modal-dialog .modal-content{
+  background-color: transparent;
+  border: none;
+}
+.btn.explain{
+	background-color: cornflowerblue;
+	border: 1px solid white;
+	color: white;
+	border-radius: 34px;
+	padding: 0px 7px 0px 7px;
+	font-weight: bold;
+	vertical-align: top;
+	font-size: 12px;
+}

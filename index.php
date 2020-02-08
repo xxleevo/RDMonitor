@@ -13,6 +13,7 @@ date_default_timezone_set($config['core']['timeZone']);
     <meta name='viewport' content='width=device-width, initial-scale=1.0, shrink-to-fit=no'>
 
     <link rel='shortcut icon' type='image/x-icon' href='./static/favicon.ico' />
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'>
     <link rel='stylesheet' type='text/css' href='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css' integrity='sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS' crossorigin='anonymous'>
     <link rel='stylesheet' type='text/css' href='https://unpkg.com/leaflet@1.4.0/dist/leaflet.css' integrity='sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==' crossorigin=''/>
     <link rel='stylesheet' type='text/css' href='./static/css/font-awesome.min.css'>
