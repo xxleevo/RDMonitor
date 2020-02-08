@@ -1,13 +1,25 @@
 .modal-loader .modal-dialog{
-  display: table;
-  position: relative;
-  margin: 0 auto;
-  top: calc(50% - 24px);
+	display: table;
+	position: relative;
+	margin: 0 auto;
+	top: calc(50% - 24px);
 }
 
 .modal-loader .modal-dialog .modal-content{
-  background-color: transparent;
-  border: none;
+	background-color: transparent;
+	border: none;
+}
+.modal-content{
+	background-color: #282a2f;
+	color: white;
+	border: 1px solid white;
+}
+.close{
+	color:white;
+	text-shadow: none;
+}
+.close:hover {
+    color: #ffffff;
 }
 .btn.explain{
 	background-color: cornflowerblue;
