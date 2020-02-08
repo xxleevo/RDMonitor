@@ -337,7 +337,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 		</div>
 		
 		<div id='no-more-tables'>
-			<table id='quest-table' class='table table-dark table-striped mb-0' border='1'>
+			<table id='done-table' class='table table-dark table-striped mb-0' border='1'>
 				<thead class='thead-dark'>
 					<tr class='text-nowrap'>
 						<th data-i18n='lorgnette_table_level' class='level'>Level</th>
@@ -349,10 +349,12 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 						<th data-i18n='lorgnette_table_spins_per_egg' class='eggspins'>Spins/Egg</th>
 						<th data-i18n='lorgnette_table_user' class='username'>User</th>
 						<th data-i18n='lorgnette_table_updated' class='updated'>Updated</th>
+						<th data-i18n='lorgnette_table_transfer_level30' class='transfer'>Transfer to RDM</th>
 					</tr>
 				</thead>";
 		foreach($result as $row){
-			$username = substr($row['username'], 0, 6) . "...";
+			$usernameFull = $row['username'];
+			$username = substr($usernameFull, 0, 6) . "...";
 			$level = $row['level']; 
 			$spins = $row['spins'];
 			$device_id = $row['device_id'];
@@ -378,6 +380,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 					<td data-title='eggspins'>" . $spinsPerEgg . "</td>
 					<td data-title='username'>" . $username . "</td>
 					<td data-title='updated'>" . $updated . "</td>
+					<td  class='text-center' data-title='transfer'><button class='btn btn-secondary' onclick='doSomething(\"" . $usernameFull . "\", this);'>Transfer</button></td>
 				</tr>
 			";
 		}
@@ -440,7 +443,41 @@ return $eggs;
 ?>
 
 <link rel="stylesheet" href="./static/css/quests.css"/>
+<link rel="stylesheet" href="./static/css/lorgnette.css"/>
 <script type="text/javascript" src="static/js/tabs.js"></script>
 <script type="text/javascript">
   document.getElementById('ongoingContainer').style.display = "block";
+</script>
+<script>
+
+function doSomething(username, row){
+	console.log('Trying to transfer user: ' + username + '...');
+	
+    return $.ajax({
+            url: 'accounthandler.php',
+            type: 'POST',
+            timeout: 300000,
+            dataType: 'json',
+            data: {
+                'action': 'transferAccount',
+                'username': username
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+				alert('ERROR' + errorMessage);
+            },
+            success: function (data, xhr) {
+                alert(data.status)
+				console.log(data.details);
+				if(data.status == "Success"){
+					document.getElementById("done-table").deleteRow(row.parentNode.parentNode.rowIndex);
+				}
+            }
+			
+        });
+	
+}
+
+function deleteTableNode(){
+	console.log('completed. now deleting table node...')
+}
 </script>

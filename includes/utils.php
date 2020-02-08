@@ -49,7 +49,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 			$order = "ORDER BY xp DESC";
 			break;
 		case 'done':
-			$conds = "WHERE level = 30 OR logout IS NOT NULL";
+			$conds = "WHERE level = 30 AND logout IS NOT NULL";
 			$order = "ORDER BY level DESC,hour ASC";
 			break;
 	}
@@ -101,7 +101,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 				$order = "ORDER BY xp DESC";
 				break;
 			case 'done':
-				$conds = "WHERE level = 30 OR logout IS NOT NULL";
+				$conds = "WHERE level = 30 AND logout IS NOT NULL";
 				$order = "ORDER BY level DESC,hour ASC";
 				break;
 		}
