@@ -70,5 +70,15 @@
 	"lorgnette_averages_xps": "XP/Spin",
 	"lorgnette_lasthours_1": "Last",
 	"lorgnette_lasthours_2": "Hours",
-	"lorgnette_table_transfer_level30": "Transfer to RDM"
+	"lorgnette_table_transfer_level30": "Transfer to RDM",
+	"lorgnette_table_explain_green": "Green",
+	"lorgnette_table_explain_yellow": "Yellow",
+	"lorgnette_table_explain_red": "Red",
+	"lorgnette_table_explain_1st": "1st Indicator: Account Status",
+	"lorgnette_table_explain_2nd": "2nd Indicator: Cooldown Status",
+	"lorgnette_table_explain_status_fine": "The account is fine",
+	"lorgnette_table_explain_status_warned": "The account has a warning",
+	"lorgnette_table_explain_status_failed": "The account failed (ban or invalid cred)",
+	"lorgnette_table_explain_cd_fine": "The account logged out more than 2h before now",
+	"lorgnette_table_explain_cd_oncd": "The account logged out less than 2h before now"
 }

@@ -70,5 +70,16 @@
 	"lorgnette_averages_xps": "XP/Spin",
 	"lorgnette_lasthours_1": "Letzte",
 	"lorgnette_lasthours_2": "Stunden",
-	"lorgnette_table_transfer_level30": "Exportieren"
+	"lorgnette_table_transfer_level30": "Exportieren",
+	"lorgnette_table_explain_green": "Grün",
+	"lorgnette_table_explain_yellow": "Gelb",
+	"lorgnette_table_explain_red": "Rot",
+	"lorgnette_table_explain_1st": "1st Indicator: Account Status",
+	"lorgnette_table_explain_2nd": "2nd Indicator: Cooldown Status",
+	"lorgnette_table_explain_status_fine": "Der Account ist OK",
+	"lorgnette_table_explain_status_warned": "Der Account hat eine Warnung",
+	"lorgnette_table_explain_status_failed": "Der Account hat einen Bann oder Invalid-Cred",
+	"lorgnette_table_explain_cd_fine": "Der Account ist vor mehr als 2Std ausgeloggt worden",
+	"lorgnette_table_explain_cd_oncd": "Der Account ist vor weniger als 2Std ausgeloggt worden"
+	
 }

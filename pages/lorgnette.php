@@ -33,14 +33,14 @@ echo "<div class='modal fade' id='explainStatusModal' tabindex='-1' role='dialog
         </button>
       </div>
       <div class='modal-body'>
-        <b><u>1st</u> Indicator: Account Status</b><br>
-		<font color='green'>Green</font>: The account is fine.<br>
-		<font color='orange'>Yellow</font>: The account has a warning<br>
-		<font color='red'>Red</font>: The account failed (ban or invalid cred)<br>
+        <b><span data-i18n='lorgnette_table_explain_1st'>1st Indicator: Account Status</span></b><br>
+		<font color='green' data-i18n='lorgnette_table_explain_green'>Green</font>: <span data-i18n='lorgnette_table_explain_status_fine'>The account is fine</span><br>
+		<font color='orange' data-i18n='lorgnette_table_explain_yellow'>Yellow</font>: <span data-i18n='lorgnette_table_explain_status_warned'>The account has a warning</span><br>
+		<font color='red' data-i18n='lorgnette_table_explain_red'>Red</font>: <span data-i18n='lorgnette_table_explain_status_failed'>The account failed (ban or invalid cred)</span><br>
 		<br>
-		<b><u>2nd</u> Indicator: Cooldown Status</b><br>
-		<font color='green'>Green</font>: The account logged out more than 2h before now<br>
-		<font color='red'>Red</font>: The account logged less than 2h before now
+		<b><spandata-i18n='lorgnette_table_explain_2nd'>2nd Indicator: Cooldown Status</span></b><br>
+		<font color='green' data-i18n='lorgnette_table_explain_green'>Green</font>: <span data-i18n='lorgnette_table_explain_cd_fine'>The account logged out more than 2h before now</span><br>
+		<font color='red' data-i18n='lorgnette_table_explain_red'>Red</font>: <span data-i18n='lorgnette_table_explain_cd_oncd'>The account logged out less than 2h before now</span>
       </div>
     </div>
   </div>
