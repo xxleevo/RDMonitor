@@ -453,28 +453,29 @@ return $eggs;
 function doSomething(username, row){
 	console.log('Trying to transfer user: ' + username + '...');
 	
-    return $.ajax({
-            url: 'accounthandler.php',
-            type: 'POST',
-            timeout: 300000,
-            dataType: 'json',
-            data: {
-                'action': 'transferAccount',
-                'username': username
-            },
-            error: function (jqXhr, textStatus, errorMessage) {
-				alert('ERROR' + errorMessage);
-            },
-            success: function (data, xhr) {
-                alert(data.status)
-				console.log(data.details);
-				if(data.status == "Success"){
-					document.getElementById("done-table").deleteRow(row.parentNode.parentNode.rowIndex);
+	if(confirm('Please Confirm to transfer the account \'' + username + '\' to your RDM DB')){
+		return $.ajax({
+				url: 'accounthandler.php',
+				type: 'POST',
+				timeout: 300000,
+				dataType: 'json',
+				data: {
+					'action': 'transferAccount',
+					'username': username
+				},
+				error: function (jqXhr, textStatus, errorMessage) {
+					alert('ERROR' + errorMessage);
+				},
+				success: function (data, xhr) {
+					alert(data.status)
+					console.log(data.details);
+					if(data.status == "Success"){
+						document.getElementById("done-table").deleteRow(row.parentNode.parentNode.rowIndex);
+					}
 				}
-            }
-			
-        });
-	
+				
+			});
+	}
 }
 
 function deleteTableNode(){
