@@ -31,3 +31,13 @@
 	vertical-align: top;
 	font-size: 12px;
 }
+.btn.masstransfer{
+	font-size:18px;
+	box-shadow: 3px 3px #000;
+}
+.hr-white{
+border-color: white;
+}
+.hr-smaller{
+margin: 10px 50px 10px 50px;
+}

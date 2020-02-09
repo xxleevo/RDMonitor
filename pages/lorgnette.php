@@ -22,7 +22,14 @@ $L30s = $account_state["hl"];
 $LLs = $account_state["ll"];
 $LMids = $account_state["ml"];
 $active_devices = $account_state["active"];
+// Get Transfer Amounts
+$transferAccounts = get_transferable_amount($sqlType,$pdo);
+$transferableAmount = $transferAccounts["transferable"];
+$failedAmount = $transferAccounts["failed"];
+$cooldownedAmount = $transferAccounts["cooldowned"];
+$recordAmount = $transferAccounts["record"];
 
+// Explanation Modal
 echo "<div class='modal fade' id='explainStatusModal' tabindex='-1' role='dialog' aria-labelledby='explainStatusModalLabel' aria-hidden='true'>
   <div class='modal-dialog' role='document'>
     <div class='modal-content'>
@@ -38,13 +45,66 @@ echo "<div class='modal fade' id='explainStatusModal' tabindex='-1' role='dialog
 		<font color='orange' data-i18n='lorgnette_table_explain_yellow'>Yellow</font>: <span data-i18n='lorgnette_table_explain_status_warned'>The account has a warning</span><br>
 		<font color='red' data-i18n='lorgnette_table_explain_red'>Red</font>: <span data-i18n='lorgnette_table_explain_status_failed'>The account failed (ban or invalid cred)</span><br>
 		<br>
-		<b><spandata-i18n='lorgnette_table_explain_2nd'>2nd Indicator: Cooldown Status</span></b><br>
+		<b><span data-i18n='lorgnette_table_explain_2nd'>2nd Indicator: Cooldown Status</span></b><br>
 		<font color='green' data-i18n='lorgnette_table_explain_green'>Green</font>: <span data-i18n='lorgnette_table_explain_cd_fine'>The account logged out more than 2h before now</span><br>
-		<font color='red' data-i18n='lorgnette_table_explain_red'>Red</font>: <span data-i18n='lorgnette_table_explain_cd_oncd'>The account logged out less than 2h before now</span>
-      </div>
+		<font color='red' data-i18n='lorgnette_table_explain_red'>Red</font>: <span data-i18n='lorgnette_table_explain_cd_oncd'>The account logged out less than 2h before now</span><br>
+		<br>
+		<b><span data-i18n='lorgnette_table_explain_3rd'>3rd Indicator(optional): Favorite Status</span></b><br>
+		<span data-i18n='lorgnette_table_explain_favo'>If a star is in the status, it indicates that this account is marked as a favorite/record account and cannot be transfered with the masstransfer tool</span>
+	  </div>
     </div>
   </div>
 </div>";
+//Mass Transfer Modal
+
+echo "<div class='modal fade' id='massTransferModal' tabindex='-1' role='dialog' aria-labelledby='massTransferModalLabel' aria-hidden='true'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='massTransferModalLabel'><span data-i18n='lorgnette_masstransfer_header'>Mass Account Transfer</span></h5>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class='modal-body' style='font-size:14px;'>
+		<p>
+			<span data-i18n='lorgnette_masstransfer_description1'>This tool will transfer accounts</span> <b data-i18n='lorgnette_masstransfer_description2'>from your Lorgnette-DB to your RDM-DB</b><br>
+			<span data-i18n='lorgnette_masstransfer_description3'>The below displayed accounts are not warned,banned and already rested 2 hours</span><br>
+			<span data-i18n='lorgnette_masstransfer_description4'>To keep it easy, you can only transfer those accounts</span> <br>
+			<b data-i18n='lorgnette_masstransfer_description5'>Accounts with a warning, ban or still in cooldown are not mass transferable</b><br>
+		</p>
+        <div class='input-group mb-3'>
+          <div class='input-group-prepend'>
+            <span class='input-group-text' style='background-color:#404040;color:white;' data-i18n='lorgnette_masstransfer_transfer'>Transfer</span>
+          </div>
+          <input id='transferAccountAmount' style='background-color:#2a2a2a;color:white;' name='transferAccountAmount' type='text' class='form-control' aria-label='Account Amount'>
+          <div class='input-group-append'>
+            <span class='input-group-text' style='background-color:#404040;color:white;'>Account(s)</span>
+          </div>
+        </div>
+		<div>
+			<center>
+			<b><font color='green' data-i18n='lorgnette_masstransfer_transferable'>Currently Transferable</font></b>:  $transferableAmount Accounts<br>
+			<hr class='hr-white hr-smaller' />
+			<b><font color='cornflowerblue' data-i18n='lorgnette_masstransfer_cooldowned'>Cooldown Highlevel</font></b>: $cooldownedAmount Accounts<br>
+			<b><font color='firebrick' data-i18n='lorgnette_masstransfer_failed'>Failed Highlevel</font></b>: $failedAmount Accounts <br>
+			<b><font color='gold' data-i18n='lorgnette_masstransfer_record'>Record Highlevel</font></b>: $recordAmount Accounts <br>
+			</center>
+		</div>
+
+		<div class='mt-4' style='font-size:12px;'>
+			<span data-i18n='lorgnette_masstransfer_record_description'>If you want to keep an account and ignore it from masstransfer, enter 'record' in the reason-column of the account. It will be ignored from the transferable accounts</span>
+		</div>
+      </div>
+	  
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-dark' style='border: 1px solid white;' onclick='massTransfer($transferableAmount)' data-i18n='lorgnette_masstransfer_transfer'>Transfer</button>
+		<button type='button' class='btn btn-secondary' style='border: 1px solid white;' data-dismiss='modal' data-i18n='lorgnette_masstransfer_close'>Close</button>
+	  </div>
+    </div>
+  </div>
+</div>";
+
 // Write all Data
 echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !important;'>
 	<div class='card text-center my-1 m-6'>
@@ -88,6 +148,17 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 					<img style='margin-right:5px;' src='static/images/highlevel.png' width='50' height='50' /> 
 					<span data-i18n='lorgnette_highlevel_accounts' >L30 Pool</span>
 					: " . $L30s . "
+				</h4>
+			</span>
+		</div>
+		<div class='col-md-3 mt-3'>
+		</div>
+		<div class='col-md-6 mt-3'>
+			<span class='list-group-item bold' style='border: 1px solid white;'>
+				<h4 class='list-group-item-heading'>
+					<center>
+					<button type='button' class='btn btn-secondary masstransfer' data-toggle='modal' data-target='#massTransferModal'>Mass Transfer Accounts</button>
+					</center>
 				</h4>
 			</span>
 		</div>
@@ -390,7 +461,6 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			$eggsGot = getEggAmount($level);
 			$spinsPerEgg = round((($xp - ($spins * 250)) /250)/$eggsGot);
 			$accountStatus = getAccountStatus($row['failed'], $row['logout']);
-			
 			//Build Table
 			echo "
 				<tr class='text-nowrap'>
@@ -429,13 +499,20 @@ function getAccountStatus($failed, $logout){
 	} else{
 		$statusFailed = "<img src='./static/images/online.png' width='24' height='auto' style='margin-right:5px;' />";
 	}
+
+	if ($failed == "record") {
+		$statusFavorite = "<img src='./static/images/star.png' width='24' height='auto' style='margin-left:10px;' />";
+	} else{
+		$statusFavorite = "";
+	}
+	
 	$now = new DateTime();
 	if($logout > strtotime("-2 hour")){
 		$statusCooldown = "<img src='./static/images/offline.png' width='24' height='auto' style='margin-left:5px;' />";
 	} else if($logout < strtotime("-2 hour")){
 		$statusCooldown = "<img src='./static/images/online.png' width='24' height='auto' style='margin-left:5px;' />";
 	}
-	return $statusFailed . $statusCooldown;
+	return $statusFailed . $statusCooldown . $statusFavorite;
 }
 
 function get_status($status, $sqlType){
@@ -515,6 +592,42 @@ function doSomething(username, row){
 				}
 				
 			});
+	}
+}
+function massTransfer(amount){
+	var transferAmount = $('#transferAccountAmount').val();
+	console.log('Trying to transfer ' + transferAmount + ' accounts');
+	if (transferAmount > 0 && transferAmount <= amount){
+		//Continue
+		if(confirm('Confirm to transfer ' + transferAmount + ' account(s) to your RDM DB')){
+			return $.ajax({
+					url: 'accounthandler.php',
+					type: 'POST',
+					timeout: 300000,
+					dataType: 'json',
+					data: {
+						'action': 'massTransferAccounts',
+						'amount': transferAmount
+					},
+					error: function (jqXhr, textStatus, errorMessage) {
+						alert('ERROR' + errorMessage);
+					},
+					success: function (data, xhr) {
+						console.log(data.details);
+						if(data.status == "Success"){
+						//Refresh Page
+						alert('Successfully transfered. The Page will refresh now.');
+						location.reload();
+						} else{
+						alert(data.status);
+						}
+					}
+					
+				});
+		}
+	} else if(transferAmount <= 0 || transferAmount > amount){
+		console.log('Wrong Account Amount');
+		alert('You entered a Wrong amount. Please adjust your transfer amount!');
 	}
 }
 

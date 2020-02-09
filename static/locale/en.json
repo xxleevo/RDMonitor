@@ -80,5 +80,20 @@
 	"lorgnette_table_explain_status_warned": "The account has a warning",
 	"lorgnette_table_explain_status_failed": "The account failed (ban or invalid cred)",
 	"lorgnette_table_explain_cd_fine": "The account logged out more than 2h before now",
-	"lorgnette_table_explain_cd_oncd": "The account logged out less than 2h before now"
+	"lorgnette_table_explain_cd_oncd": "The account logged out less than 2h before now",
+	"lorgnette_table_explain_3rd": "3rd Indicator(optional)",
+	"lorgnette_table_explain_favo": "If a star is in the status, it indicates that this account is marked as a favorite/record account and cannot be transfered with the masstransfer tool",
+	"lorgnette_masstransfer_header": "Mass Account Transfer",
+	"lorgnette_masstransfer_description1": "This tool will transfer accounts",
+	"lorgnette_masstransfer_description2": "from your Lorgnette-DB to your RDM-DB",
+	"lorgnette_masstransfer_description3": "The below displayed accounts are not warned,banned and already rested 2 hours",
+	"lorgnette_masstransfer_description4": "To keep it easy, you can only transfer those accounts",
+	"lorgnette_masstransfer_description5": "Accounts with a warning, ban or still in cooldown are not mass transferable",
+	"lorgnette_masstransfer_transfer": "Transfer",
+	"lorgnette_masstransfer_transferable": "Currently Transferable",
+	"lorgnette_masstransfer_cooldowned": "Cooldown Highlevel",
+	"lorgnette_masstransfer_failed": "Failed Highlevel",
+	"lorgnette_masstransfer_record": "Record Highlevel",
+	"lorgnette_masstransfer_record_description": "If you want to keep an account and ignore it from masstransfer, enter 'record' in the reason-column of the account. It will be ignored from the transferable accounts",
+	"lorgnette_masstransfer_close": "Close"
 }

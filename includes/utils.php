@@ -1,6 +1,44 @@
 <?php
 //Utils 
 
+function get_transferable_amount($sqlType, $pdo){
+	if($sqlType == 'psql'){
+		$sql = "
+			SELECT
+				(select count(*) from accounts where level = 30 AND reason IS NULL AND logout < extract(epoch from now()-INTERVAL '2 hour')) as transferable, 
+				(select count(*) from accounts where level = 30 AND reason IS NOT NULL AND reason != 'record') as failed, 
+				(select count(*) from accounts where level = 30 AND logout > extract(epoch from now()-INTERVAL '2 hour')) as cooldowned,
+				(select count(*) from accounts where level = 30 AND reason IS NOT NULL AND reason = 'record') as record;
+		";
+		$result = pg_query($sql) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+		$row = pg_fetch_array($result, null, PGSQL_ASSOC);
+		// Free result set
+		pg_free_result($result);
+		return $row;
+	} else if($sqlType == 'mysql'){
+		try {
+			$sql = "
+				SELECT 
+					sum(reason IS NULL AND logout < UNIX_TIMESTAMP(NOW() - INTERVAL 2 HOUR)) as transferable,
+					sum(reason IS NOT NULL AND reason != 'record') as failed,
+					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 2 HOUR)) as cooldowned,
+					sum(reason IS NOT NULL AND reason = 'record') as record
+				FROM accounts
+				WHERE level >= 30;
+			";
+			$result = $pdo->query($sql);
+			if ($result->rowCount() > 0) {
+				$row = $result->fetch();
+				// Free result set
+				unset($result);
+				return $row;
+			}
+		} catch (PDOException $e) {
+			die("ERROR: Could not able to execute $sql. " . $e->getMessage());
+		}
+	}
+}
+
 function get_lorgnette_overview($sqlType, $pdo){
 	if($sqlType == 'psql'){
 		$sql = "
@@ -86,6 +124,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 			$data[$i]["updated"] = $row["updated"];
 			$data[$i]["online"] = $row["online"];
 			$data[$i]["logout"] = $row["logout"];
+			$data[$i]["failed"] = $row["failed"];
 			$i++;
 		}
 		// Free result set
@@ -118,6 +157,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 					round((updated-login)/3600.0, 2) as hour, 
 					FROM_UNIXTIME(updated) as updated,
 					logout,
+					reason as failed,
 					updated > UNIX_TIMESTAMP(NOW() - INTERVAL 5 MINUTE) as online
 				FROM accounts 
 			$conds
@@ -138,6 +178,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 					$data[$i]["updated"] = $row["updated"];
 					$data[$i]["online"] = $row["online"];
 					$data[$i]["logout"] = $row["logout"];
+					$data[$i]["failed"] = $row["failed"];
 					$i++;
 				}
 				// Free result set
