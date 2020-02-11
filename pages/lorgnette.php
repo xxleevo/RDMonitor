@@ -214,17 +214,32 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			$hour = floor($row['hour']);
 			$minute = ($row['hour']*60)%60;
 			$status = get_status($row['online'], $sqlType);
-			$spinsPerHour = round($spins / $row['hour']);
+			$spinsPerHour = 0;
+			if($spins > 0 && $row['hour'] > 0){
+				$spinsPerHour = round($spins / $row['hour']);
+			}
 			
 			$xp = $row['xp'];
-			$xph = round(($xp / $row['hour'])/1000,1);
-			$avg_xp_stop = round($xp / $spins);
+			$xph = 0;
+			if($xp > 0 && $row['hour'] > 0){
+				$xph = round(($xp / $row['hour'])/1000,1);
+			}
+			
+			$avg_xp_stop = 0;
+			if($xp > 0 && $spins > 0){
+				$avg_xp_stop = round($xp / $spins);
+			}
 			
 			//Estimates
 			$xpNeeded = 2000000;
-			$estXpPerHour = ($xp / $row['hour']);
-			
-			$estFinish = ($xpNeeded - $xp)/($estXpPerHour);
+			$estXpPerHour = 0;
+			if($xp > 0 && $row['hour'] > 0){
+				$estXpPerHour = ($xp / $row['hour']);
+			}
+			$estFinish = 0;
+			if(($xpNeeded - $xp) > 0 && $estXpPerHour > 0){
+				$estFinish = ($xpNeeded - $xp)/($estXpPerHour);
+			}
 			$estFinishHours = floor($estFinish);
 			$estFinishMinutes = ($estFinish*60)%60;
 			
@@ -347,6 +362,11 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 				$durationString = "";
 			}
 			if (is_array($result) || is_object($result)){
+					$averages["XPH"] = 0;
+					$averages["Duration"] = 0;
+					$averages["Spins"] = 0;
+					$averages["SpinsPerEgg"] = 0;
+					$averages["XPS"] = 0;
 				foreach($result as $row){
 					//Build Averages
 					if($config['ui']['pages']['lorgnette']['highLevelAverageLimitTime'] !== null && $config['ui']['pages']['lorgnette']['highLevelAverageLimitTime']){
