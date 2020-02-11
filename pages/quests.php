@@ -60,7 +60,7 @@ try {
 		while ($row = $result->fetch()) {
 			$pokeDatas[$row['pokeId']][$row['pokeForm']]["id"] = $row['pokeId'];
 			$pokeDatas[$row['pokeId']][$row['pokeForm']]["form"] = $row['pokeForm'];
-			$pokeDatas[$row['pokeId']][$row['pokeForm']]["amount"] = $pokeDatas[$row['pokeId']][$row['pokeForm']]["amount"] + $row['count'];
+			$pokeDatas[$row['pokeId']][$row['pokeForm']]["amount"] = $row['count'];
 		}
 		// Free result set
 		unset($result);
@@ -84,7 +84,7 @@ try {
 	if ($result->rowCount() > 0) {
 		while ($row = $result->fetch()) {
 			$itemDatas[$row['itemId']]['id'] = $row['itemId'];
-			$itemDatas[$row['itemId']]['amount'] += $row['count'];
+			$itemDatas[$row['itemId']]['amount'] = $row['count'];
 		}
 		// Free result set
 		unset($result);
@@ -109,7 +109,7 @@ try {
 	if ($result->rowCount() > 0) {
 		while ($row = $result->fetch()) {
 			$dustDatas[$row['amount']]['rewardAmount'] = $row['amount'];
-			$dustDatas[$row['amount']]['questAmount'] += $row['count'];
+			$dustDatas[$row['amount']]['questAmount'] = $row['count'];
 		}
 		// Free result set
 		unset($result);
