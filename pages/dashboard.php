@@ -4,10 +4,10 @@ global $config;
 $db = new DbConnector($config['db']);
 $pdo = $db->getConnection();
 
-$devicesOnline = $row["devices_online"];
-$devicesOffline = $row["devices_offline"];
-$invasionsPerHour = $row["invasions_per_hour"];
-$ivPerHour = $row["iv_per_hour"];
+$devicesOnline = 0;
+$devicesOffline = 0;
+$invasionsPerHour = 0;
+$ivPerHour = 0;
 
 //General Data
 try {
