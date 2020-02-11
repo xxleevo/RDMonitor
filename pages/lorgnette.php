@@ -325,7 +325,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 		echo "<div style='border: 1px solid white;border-top:none;'>";
 			$result = get_lorgnette_accounts($sqlType, $pdo, 'done');
 			$averages = [];
-			if(sizeOf($result) > 1){
+			if(is_array($result) && sizeOf($result) > 1){
 				$showAverages = true;
 				$resultAmount = sizeOf($result);
 				//Set Averages to 0 first
@@ -346,23 +346,25 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			} else{
 				$durationString = "";
 			}
-			foreach($result as $row){
-				//Build Averages
-				if($config['ui']['pages']['lorgnette']['highLevelAverageLimitTime'] !== null && $config['ui']['pages']['lorgnette']['highLevelAverageLimitTime']){
-					if(($now - $row['logout']) <= $includeTime*3600){
+			if (is_array($result) || is_object($result)){
+				foreach($result as $row){
+					//Build Averages
+					if($config['ui']['pages']['lorgnette']['highLevelAverageLimitTime'] !== null && $config['ui']['pages']['lorgnette']['highLevelAverageLimitTime']){
+						if(($now - $row['logout']) <= $includeTime*3600){
+							$averages["XPH"] += $row['xp'] / $row['hour'];
+							$averages["Duration"] += $row['hour'];
+							$averages["Spins"] += $row['spins'];
+							$averages["SpinsPerEgg"] += round((($row['xp'] - ($row['spins'] * 250)) /250)/getEggAmount($row['level']));
+							$averages["XPS"] += $row['xp'] / $row['spins'];
+							$resultAmount++;
+						}
+					}else{
 						$averages["XPH"] += $row['xp'] / $row['hour'];
 						$averages["Duration"] += $row['hour'];
 						$averages["Spins"] += $row['spins'];
 						$averages["SpinsPerEgg"] += round((($row['xp'] - ($row['spins'] * 250)) /250)/getEggAmount($row['level']));
 						$averages["XPS"] += $row['xp'] / $row['spins'];
-						$resultAmount++;
 					}
-				}else{
-					$averages["XPH"] += $row['xp'] / $row['hour'];
-					$averages["Duration"] += $row['hour'];
-					$averages["Spins"] += $row['spins'];
-					$averages["SpinsPerEgg"] += round((($row['xp'] - ($row['spins'] * 250)) /250)/getEggAmount($row['level']));
-					$averages["XPS"] += $row['xp'] / $row['spins'];
 				}
 			}
 			//Print Averages
@@ -445,38 +447,40 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 						<th class='status'>Status <button type='button' class='btn explain' data-toggle='modal' data-target='#explainStatusModal'>?</button></th>
 					</tr>
 				</thead>";
-		foreach($result as $row){
-			$usernameFull = $row['username'];
-			$username = substr($usernameFull, 0, 6) . "...";
-			$level = $row['level']; 
-			$spins = $row['spins'];
-			$device_id = $row['device_id'];
-			$route = $row['route'];
-			$xp = $row['xp'];
-			$hour = floor($row['hour']);
-			$xph = round($xp / $row['hour']);
-			$avg_xp_stop = round($xp / $spins);
-			$minute = ($row['hour']*60)%60;
-			$updated = $row['updated'];
-			$eggsGot = getEggAmount($level);
-			$spinsPerEgg = round((($xp - ($spins * 250)) /250)/$eggsGot);
-			$accountStatus = getAccountStatus($row['failed'], $row['logout']);
-			//Build Table
-			echo "
-				<tr class='text-nowrap'>
-					<td data-title='level'>" . $level . "</td>
-					<td data-title='hour'>" . $hour . "h " .  $minute  ."m" ."</td>
-					<td data-title='xp'>" . $xp . "</td>
-					<td data-title='xph'>" . $xph . "</td>
-					<td data-title='spins'>" . $spins . "</td>
-					<td data-title='xpspins'>" . $avg_xp_stop . "</td>
-					<td data-title='eggspins'>" . $spinsPerEgg . "</td>
-					<td data-title='username'>" . $username . "</td>
-					<td data-title='updated'>" . $updated . "</td>
-					<td  class='text-center' data-title='transfer'><button class='btn btn-secondary' onclick='doSomething(\"" . $usernameFull . "\", this);'>Transfer</button></td>
-					<td data-title='status'><center>" . $accountStatus . "</center></td>
-				</tr>
-			";
+		if (is_array($result) || is_object($result)){
+			foreach($result as $row){
+				$usernameFull = $row['username'];
+				$username = substr($usernameFull, 0, 6) . "...";
+				$level = $row['level']; 
+				$spins = $row['spins'];
+				$device_id = $row['device_id'];
+				$route = $row['route'];
+				$xp = $row['xp'];
+				$hour = floor($row['hour']);
+				$xph = round($xp / $row['hour']);
+				$avg_xp_stop = round($xp / $spins);
+				$minute = ($row['hour']*60)%60;
+				$updated = $row['updated'];
+				$eggsGot = getEggAmount($level);
+				$spinsPerEgg = round((($xp - ($spins * 250)) /250)/$eggsGot);
+				$accountStatus = getAccountStatus($row['failed'], $row['logout']);
+				//Build Table
+				echo "
+					<tr class='text-nowrap'>
+						<td data-title='level'>" . $level . "</td>
+						<td data-title='hour'>" . $hour . "h " .  $minute  ."m" ."</td>
+						<td data-title='xp'>" . $xp . "</td>
+						<td data-title='xph'>" . $xph . "</td>
+						<td data-title='spins'>" . $spins . "</td>
+						<td data-title='xpspins'>" . $avg_xp_stop . "</td>
+						<td data-title='eggspins'>" . $spinsPerEgg . "</td>
+						<td data-title='username'>" . $username . "</td>
+						<td data-title='updated'>" . $updated . "</td>
+						<td  class='text-center' data-title='transfer'><button class='btn btn-secondary' onclick='doSomething(\"" . $usernameFull . "\", this);'>Transfer</button></td>
+						<td data-title='status'><center>" . $accountStatus . "</center></td>
+					</tr>
+				";
+			}
 		}
 		echo "
 			</table>
