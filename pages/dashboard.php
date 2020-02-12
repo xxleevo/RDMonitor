@@ -55,6 +55,25 @@ if($config['ui']['pages']['lorgnette']['enabled']){
 	$LLs = $account_state["ll"];
 	$LMids = $account_state["ml"];
 	$active_devices = $account_state["active"];
+	
+	//Get Next 30s
+	$nextAccount = get_lorgnette_next_account($sqlType, $pdo);
+	$nextAccountTimeLeft = 0;
+	$nextAccountTimeOver = 0;
+	if (is_array($nextAccount) || is_object($nextAccount)){
+		$nextAccountTimeLeft = $nextAccount["timeLeft"];
+		$nextAccountTimeOver = $nextAccount["timeOver"];
+		$nextAccountPercentage = (($nextAccountTimeOver/($nextAccountTimeLeft + $nextAccountTimeOver))*100);
+		if($nextAccountPercentage > 100){
+			$nextAccountPercentage = 100;
+		}
+	}
+	$nextAccHours = 0;
+	$nextAccMinutes = 0;
+	if($nextAccountTimeLeft > 0){
+		$nextAccHours = floor(($nextAccountTimeLeft*60)/60);
+		$nextAccMinutes = ($nextAccountTimeLeft*60)%60;
+	}
 }
 
 // Close connection
@@ -134,21 +153,44 @@ $html = "
 						</h4>
 					</span>
 				</div>
+			</div>";
+			
+			
+			$html.="
+			<button style='border: 1px solid white;border-bottom:none;' class='btn btn-secondary' onclick='reloadData()'><b><span data-i18n='lorgnette_button_update' >Update</span></b></button>
+			<div class='row mb-4 float-none'>
+				<div class='col-md-12 mb-4'>
+					<span class='list-group-item bold'>
+						<h3 class='list-group-item-heading'>
+							<span style='float:left;'><span data-i18n='lorgnette_nextAccount'>Next Acc ready in</span>: <b>";
+							if ($nextAccHours > 0){
+							$html .= $nextAccHours . "h";
+							}
+							$html .= " " . $nextAccMinutes . "m</b></span>
+							<span style='float:right;'>" . round($nextAccountPercentage,2) . "%</span>
+							<span style='float:clear;'></span><br>
+						</h3>
+						<div class='progress' style='height: 40px;'>
+							<div id='accountBar' class='progress-bar progress-bar-striped progress-bar-animated bg-success' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%;'>
+							</div>
+						</div>
+					</span>
+				</div>
 			</div>
-				
+			
+			
 			<div class='dark text-light text-center my-3'>
 				<u>
 					<span style='font-size:32px;' data-i18n='dashboard_lorgnette_accounts' >Lorgnette Accounts</span>
 				</u>
 			</div>
-			
 			<div class='row mb-4'>
 				<div class='col-md-4'>
 					<span class='list-group-item bold'>
-						<h3 class='list-group-item-heading'>
+						<h4 class='list-group-item-heading'>
 							<img style='margin-right:5px;' src='static/images/lowlevel.png' width='50' height='50' /> 
 							0-1's: <font color='#ff2c1e'>" . $LLs . "</font>
-						</h3>
+						</h4>
 					</span>
 				</div>
 				<div class='col-md-4'>
@@ -164,6 +206,7 @@ $html = "
 						<h4 class='list-group-item-heading'>
 							<img style='margin-right:5px;' src='static/images/highlevel.png' width='50' height='50' /> 
 							30's: <font color='lime'>" . $L30s . "</font>
+							
 						</h4>
 					</span>
 				</div>
@@ -176,3 +219,21 @@ $html .= "
 echo $html;
 ?>
 <link rel="stylesheet" href="./static/css/dashboard.css"/>
+<script type="text/javascript">
+var accTimeLeft = <?php echo $nextAccountTimeLeft ?>;
+var accTimeOver = <?php echo $nextAccountTimeOver ?>;
+var totalTime = accTimeLeft + accTimeOver;
+var perc = Math.round((accTimeOver/totalTime) * 100);
+if(perc > 100){
+	perc = 100;
+}
+var percString = perc.toString() + "%";
+console.log(perc);
+$(".progress-bar").animate({
+    width: percString
+}, 400);
+
+function reloadData(){
+location.reload()
+}
+</script>

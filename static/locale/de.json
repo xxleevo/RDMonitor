@@ -95,5 +95,7 @@
 	"lorgnette_masstransfer_failed": "Failed Highlevel",
 	"lorgnette_masstransfer_record": "Rekord Highlevel",
 	"lorgnette_masstransfer_record_description": "Wenn du einen Account behalten möchtest und vom Masstransfer ausschließen willst, trage 'record' in die reason-Spalte des Accounts ein. Dadurch wird er vom Tool als Favorit erkannt und nicht transferierbar gemacht",
-	"lorgnette_masstransfer_close": "Schließen"
+	"lorgnette_masstransfer_close": "Schließen",
+	"lorgnette_button_update": "Aktualisieren",
+	"lorgnette_nextAccount": "Nächster Acc fertig"
 }

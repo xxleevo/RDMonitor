@@ -127,7 +127,11 @@ background-color: #0b0c0d;
 	border-radius: 0px 0px 5px 5px;
 }
 h4{
-	font-size: 30px;
+	font-size: 20px;
+	font-weight: bold;
+}
+h3{
+	font-size: 1em;
 }
 button{
 color:black;

@@ -190,4 +190,47 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 		}
 	}
 }
+
+function get_lorgnette_next_account($sqlType, $pdo){
+	if($sqlType == 'psql'){
+		$sql = "
+		
+			SELECT
+				round(((2000000 - total_exp) / (total_exp / ((updated+1-login)/60/60))),3) as timeLeft,
+                round(((updated-login)/60/60),3) as timeOver
+			FROM
+				accounts
+			WHERE 
+				updated > extract(epoch from now()-INTERVAL '5 minute') AND device_id is not null AND total_exp > 0 AND login is not null
+			ORDER BY timeLeft ASC LIMIT 1;
+		";
+		$result = pg_query($sql) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
+		$row = pg_fetch_array($result, null, PGSQL_ASSOC);
+		// Free result set
+		pg_free_result($result);
+		return $row;
+	} else if($sqlType == 'mysql'){
+		try {
+			$sql = "
+				SELECT
+					round(((2000000 - total_exp) / (total_exp / ((updated+1-login)/60/60))),3) as timeLeft,
+                    round(((updated-login)/60/60),3) as timeOver
+				FROM
+					accounts
+				WHERE 
+					updated > UNIX_TIMESTAMP(NOW() - INTERVAL 5 MINUTE) AND device_id is not null AND total_exp > 0 AND login is not null
+				ORDER BY timeLeft ASC LIMIT 1;
+			";
+			$result = $pdo->query($sql);
+			if ($result->rowCount() > 0) {
+				$row = $result->fetch();
+				// Free result set
+				unset($result);
+				return $row;
+			}
+		} catch (PDOException $e) {
+			die("ERROR: Could not able to execute $sql. " . $e->getMessage());
+		}
+	}
+}
 ?>

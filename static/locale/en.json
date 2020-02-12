@@ -95,5 +95,7 @@
 	"lorgnette_masstransfer_failed": "Failed Highlevel",
 	"lorgnette_masstransfer_record": "Record Highlevel",
 	"lorgnette_masstransfer_record_description": "If you want to keep an account and ignore it from masstransfer, enter 'record' in the reason-column of the account. It will be ignored from the transferable accounts",
-	"lorgnette_masstransfer_close": "Close"
+	"lorgnette_masstransfer_close": "Close",
+	"lorgnette_button_update": "Update",
+	"lorgnette_nextAccount": "Next Acc ready in"
 }
