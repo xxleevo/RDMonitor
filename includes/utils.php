@@ -196,8 +196,8 @@ function get_lorgnette_next_account($sqlType, $pdo){
 		$sql = "
 		
 			SELECT
-				((2000000 - total_exp) / (total_exp / ((updated+1-login)/60/60))) as timeleft,
-                ((updated-login)/60/60) as timeover
+				((2000000 - total_exp) / (total_exp / round((updated-login)/3600.0, 2))) as timeleft,
+                round((updated-login)/3600.0, 2) as timeover
 			FROM accounts
 			WHERE updated > extract(epoch from now()-INTERVAL '5 minute') AND device_id is not null AND total_exp > 0 AND login is not null
 			ORDER BY timeleft ASC LIMIT 1;
