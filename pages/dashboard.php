@@ -61,8 +61,8 @@ if($config['ui']['pages']['lorgnette']['enabled']){
 	$nextAccountTimeLeft = 0;
 	$nextAccountTimeOver = 0;
 	if (is_array($nextAccount) || is_object($nextAccount)){
-		$nextAccountTimeLeft = $nextAccount["timeLeft"];
-		$nextAccountTimeOver = $nextAccount["timeOver"];
+		$nextAccountTimeLeft = $nextAccount["timeleft"];
+		$nextAccountTimeOver = $nextAccount["timeover"];
 		$nextAccountPercentage = (($nextAccountTimeOver/($nextAccountTimeLeft + $nextAccountTimeOver))*100);
 		if($nextAccountPercentage > 100){
 			$nextAccountPercentage = 100;
@@ -74,6 +74,7 @@ if($config['ui']['pages']['lorgnette']['enabled']){
 		$nextAccHours = floor(($nextAccountTimeLeft*60)/60);
 		$nextAccMinutes = ($nextAccountTimeLeft*60)%60;
 	}
+	echo $nextAccountTimeLeft;
 }
 
 // Close connection
@@ -154,7 +155,6 @@ $html = "
 					</span>
 				</div>
 			</div>";
-			
 			
 			$html.="
 			<button style='border: 1px solid white;border-bottom:none;' class='btn btn-secondary' onclick='reloadData()'><b><span data-i18n='lorgnette_button_update' >Update</span></b></button>

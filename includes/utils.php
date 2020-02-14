@@ -196,13 +196,11 @@ function get_lorgnette_next_account($sqlType, $pdo){
 		$sql = "
 		
 			SELECT
-				round(((2000000 - total_exp) / (total_exp / ((updated+1-login)/60/60))),3) as timeLeft,
-                round(((updated-login)/60/60),3) as timeOver
-			FROM
-				accounts
-			WHERE 
-				updated > extract(epoch from now()-INTERVAL '5 minute') AND device_id is not null AND total_exp > 0 AND login is not null
-			ORDER BY timeLeft ASC LIMIT 1;
+				((2000000 - total_exp) / (total_exp / ((updated+1-login)/60/60))) as timeleft,
+                ((updated-login)/60/60) as timeover
+			FROM accounts
+			WHERE updated > extract(epoch from now()-INTERVAL '5 minute') AND device_id is not null AND total_exp > 0 AND login is not null
+			ORDER BY timeleft ASC LIMIT 1;
 		";
 		$result = pg_query($sql) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
 		$row = pg_fetch_array($result, null, PGSQL_ASSOC);
@@ -213,8 +211,8 @@ function get_lorgnette_next_account($sqlType, $pdo){
 		try {
 			$sql = "
 				SELECT
-					round(((2000000 - total_exp) / (total_exp / ((updated+1-login)/60/60))),3) as timeLeft,
-                    round(((updated-login)/60/60),3) as timeOver
+					round(((2000000 - total_exp) / (total_exp / ((updated+1-login)/60/60))),3) as timeleft,
+                    round(((updated-login)/60/60),3) as timeover
 				FROM
 					accounts
 				WHERE 
