@@ -85,9 +85,15 @@ if ( $action === "transferAccount") {
 		$pdo = $db->getConnection();
 		// Set SQLs
 		$sql = "
-			INSERT INTO account(username, password, level, last_encounter_time, spins, tutorial)
-			VALUES ('$username', '$password', $level, $logout, 0, 1);
+			INSERT INTO account(username, password, level, last_encounter_time, spins)
+			VALUES ('$username', '$password', $level, $logout, 0);
 		";
+		if(!empty($config['core']['modify']) && $config['core']['modify'] == true){
+			$sql = "
+				INSERT INTO account(username, password, level, last_encounter_time, spins, tutorial)
+				VALUES ('$username', '$password', $level, $logout, 0, 1);
+			";
+		}
 		$sql_verify = "
 			SELECT username from account where username = '$username';
 		";
@@ -311,9 +317,16 @@ if ( $action === "massTransferAccounts") {
 				$levelX = $row['level'];
 				$logoutX = $row['logout'];
 				$sql = "
-					INSERT INTO account(username, password, level, last_encounter_time, spins, tutorial)
-					VALUES ('$usernameX', '$passwordX', $levelX, $logoutX, 0, 1);
+					INSERT INTO account(username, password, level, last_encounter_time, spins)
+					VALUES ('$usernameX', '$passwordX', $levelX, $logoutX, 0);
 				";
+
+				if(!empty($config['core']['modify']) && $config['core']['modify'] == true){
+					$sql = "
+						INSERT INTO account(username, password, level, last_encounter_time, spins, tutorial)
+						VALUES ('$usernameX', '$passwordX', $levelX, $logoutX, 0, 1);
+					";
+				}
 				$result = $pdo->query($sql);
 				// If inserted Successfully, increase importedAmount
 				if ($result->rowCount() > 0) {

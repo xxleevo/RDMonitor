@@ -530,13 +530,34 @@ function getAccountStatus($failed, $logout){
 		$statusFavorite = "";
 	}
 	
+	if (strpos($failed,";") !== false){
+		// Detect Misc entrys
+		switch($failed){
+			case ";red":
+				$statusCategory = "<font color='red' style='width:24px;height:auto;margin-left:10px;vertical-align: middle;'>■</font>";
+				break;
+			case ";green":
+				$statusCategory = "<font color='limegreen' style='width:24px;height:auto;margin-left:10px;vertical-align: middle;'>■</font>";
+				break;
+			case ";blue":
+				$statusCategory = "<font color='cornflowerblue' style='width:24px;height:auto;margin-left:10px;vertical-align: middle;'>■</font>";
+				break;
+			case ";yellow":
+				$statusCategory = "<font color='orange' style='width:24px;height:auto;margin-left:10px;vertical-align: middle;'>■</font>";
+				break;
+		}
+		
+	} else{
+		$statusCategory = "";
+	}
+	
 	$now = new DateTime();
 	if($logout > strtotime("-2 hour")){
 		$statusCooldown = "<img src='./static/images/offline.png' width='24' height='auto' style='margin-left:5px;' />";
 	} else if($logout < strtotime("-2 hour")){
 		$statusCooldown = "<img src='./static/images/online.png' width='24' height='auto' style='margin-left:5px;' />";
 	}
-	return $statusFailed . $statusCooldown . $statusFavorite;
+	return $statusFailed . $statusCooldown . $statusFavorite . $statusCategory;
 }
 
 function get_status($status, $sqlType){

@@ -8,6 +8,7 @@ $config = [
     "dateTimeFormat" => "m-d-Y h:i:s A", //Date & Time format http://php.net/manual/en/function.date.php
     "showErrors" => true, //Show PHP errors
     "showDebug" => false, //Shows debug output
+	"modify" => false // Leave this false
   ],
   "db" => [ //The rdm database
 	"type" => "mysql", //Only Mysql here.
