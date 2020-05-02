@@ -61,7 +61,7 @@ if($config['ui']['pages']['lorgnette']['enabled']){
 	$active_devices = $account_state["active"];
 	
 	//Calculate the 24h percentage of relative comparison
-	$AccsDayPercentage = round((($AccsLastDay / ($AccsLast2Days - $AccsLastDay))-1),2);
+	$AccsDayPercentage = round(((($AccsLastDay / ($AccsLast2Days - $AccsLastDay))-1)*100),2);
 	if($AccsDayPercentage >= 0){
 		$percentageString = "<font color='limegreen'><span style='font-size:20px;'>↑</span><span style='font-size:13px;'>" . $AccsDayPercentage . "%</span></font>";
 	} else{
