@@ -54,7 +54,19 @@ if($config['ui']['pages']['lorgnette']['enabled']){
 	$L30s = $account_state["hl"];
 	$LLs = $account_state["ll"];
 	$LMids = $account_state["ml"];
+	$AccsLastDay = $account_state["day"];
+	$AccsLast2Days = $account_state["2day"];
+	$AccsLastWeek = $account_state["week"];
+	$AccsLastMonth = $account_state["month"];
 	$active_devices = $account_state["active"];
+	
+	//Calculate the 24h percentage of relative comparison
+	$AccsDayPercentage = round((($AccsLastDay / ($AccsLast2Days - $AccsLastDay))-1),2);
+	if($AccsDayPercentage >= 0){
+		$percentageString = "<font color='limegreen'><span style='font-size:20px;'>↑</span><span style='font-size:13px;'>" . $AccsDayPercentage . "%</span></font>";
+	} else{
+		$percentageString = "<font color='red'><span style='font-size:20px;'>↓</span><span style='font-size:13px;'>" . $AccsDayPercentage . "%</span></font>";
+	}
 	
 	//Get Next 30s
 	$nextAccount = get_lorgnette_next_account($sqlType, $pdo);
@@ -142,7 +154,7 @@ $html = "
 			</div>
 		</div>
 		<div class='card-body'>
-			<div class='row mb-4'>
+			<div class='row'>
 				<div class='col-md-12 mb-4'>
 					<span class='list-group-item bold'>
 						<h4 class='list-group-item-heading'>
@@ -151,6 +163,48 @@ $html = "
 								<span data-i18n='dashboard_active_devices' >Active Devices</span>
 								: " . $active_devices . "
 							</center>
+						</h4>
+					</span>
+				</div>
+			</div>
+			
+			<div class='row mb-4'>
+				<div class='col-md-3'>
+				</div>
+				<div class='col-md-6'>
+					<span class='list-group-item bold'>
+						<h4 class='list-group-item-heading'>
+							<img style='margin-right:5px;' src='static/images/day.png' width='50' height='50' /> 
+							Finished Accounts in the last 24 hours: <font color='skyblue'>" . $AccsLastDay . " " .  $percentageString . "</font>
+						</h4>
+					</span>
+				</div>
+				<div class='col-md-3'>
+				</div>
+			</div>
+			<div class='row mb-4'>
+				<div class='col-md-4'>
+					<span class='list-group-item bold'>
+						<h4 class='list-group-item-heading'>
+							<img style='margin-right:5px;' src='static/images/2days.png' width='50' height='50' /> 
+							Accs last 48h: <font color='skyblue'>" . $AccsLast2Days . "</font>
+						</h4>
+					</span>
+				</div>
+				<div class='col-md-4'>
+					<span class='list-group-item bold'>
+						<h4 class='list-group-item-heading'>
+							<img style='margin-right:5px;' src='static/images/week.png' width='50' height='50' /> 
+							Accs last week: <font color='skyblue'>" . $AccsLastWeek . "</font>
+						</h4>
+					</span>
+				</div>
+				<div class='col-md-4'>
+					<span class='list-group-item bold'>
+						<h4 class='list-group-item-heading'>
+							<img style='margin-right:5px;' src='static/images/month.png' width='50' height='50' /> 
+							Accs last month: <font color='skyblue'>" . $AccsLastMonth . "</font>
+							
 						</h4>
 					</span>
 				</div>

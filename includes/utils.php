@@ -46,6 +46,10 @@ function get_lorgnette_overview($sqlType, $pdo){
 				(select count(*) from accounts where level = 30) as hl, 
 				(select count(*) from accounts where level = 0 OR level = 1) as ll, 
 				(select count(*) from accounts where level >1 AND level <30) as ml,
+				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '24 hour')) as day,
+				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '48 hour')) as 2day,
+				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '7 day')) as week,
+				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '30 day')) as month,
 				(select count(*) as active from accounts where device_id is not null AND updated > extract(epoch from now()-INTERVAL '5 minute'));
 		";
 		$result = pg_query($sql) or die('Abfrage fehlgeschlagen: ' . pg_last_error());
@@ -58,7 +62,16 @@ function get_lorgnette_overview($sqlType, $pdo){
 			$sql = "
 		
 			SELECT * FROM(
-				SELECT sum(level=30) as hl, sum(level=0 OR level = 1) as ll, sum(level >1 AND level <30) as ml from accounts
+				SELECT 
+					sum(level=30) as hl, 
+					sum(level=0 OR level = 1) as ll, 
+					sum(level >1 AND level <30) as ml,
+					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 24 HOUR)) as day, 
+					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 48 HOUR)) as 2day, 
+					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 7 DAY)) as week, 
+					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 30 DAY)) as month
+					
+				FROM accounts
 			) AS a
 			JOIN(
 				SELECT COUNT(*) as active from accounts where device_id is not null AND updated >= UNIX_TIMESTAMP(NOW() - INTERVAL 5 MINUTE)
