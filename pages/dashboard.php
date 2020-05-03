@@ -55,7 +55,7 @@ if($config['ui']['pages']['lorgnette']['enabled']){
 	$LLs = $account_state["ll"];
 	$LMids = $account_state["ml"];
 	$AccsLastDay = $account_state["day"];
-	$AccsLast2Days = $account_state["2day"];
+	$AccsLast2Days = $account_state["daytwo"];
 	$AccsLastWeek = $account_state["week"];
 	$AccsLastMonth = $account_state["month"];
 	$active_devices = $account_state["active"];

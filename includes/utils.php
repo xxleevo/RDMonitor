@@ -47,7 +47,7 @@ function get_lorgnette_overview($sqlType, $pdo){
 				(select count(*) from accounts where level = 0 OR level = 1) as ll, 
 				(select count(*) from accounts where level >1 AND level <30) as ml,
 				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '24 hour')) as day,
-				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '48 hour')) as 2day,
+				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '48 hour')) as daytwo,
 				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '7 day')) as week,
 				(select count(*) from accounts where logout > extract(epoch from now()-INTERVAL '30 day')) as month,
 				(select count(*) as active from accounts where device_id is not null AND updated > extract(epoch from now()-INTERVAL '5 minute'));
@@ -67,7 +67,7 @@ function get_lorgnette_overview($sqlType, $pdo){
 					sum(level=0 OR level = 1) as ll, 
 					sum(level >1 AND level <30) as ml,
 					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 24 HOUR)) as day, 
-					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 48 HOUR)) as 2day, 
+					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 48 HOUR)) as daytwo, 
 					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 7 DAY)) as week, 
 					sum(logout > UNIX_TIMESTAMP(NOW() - INTERVAL 30 DAY)) as month
 					
