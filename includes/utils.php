@@ -110,6 +110,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 				username, 
 				level, 
 				spins, 
+				instance, 
 				device_id, 
 				route_num as route, 
 				total_exp as xp, 
@@ -131,6 +132,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 			$data[$i]["device_id"] = $row["device_id"];
 			$data[$i]["username"] = $row["username"];
 			$data[$i]["spins"] = $row["spins"];
+			$data[$i]["instance"] = $row["instance"];
 			$data[$i]["route"] = $row["route"];
 			$data[$i]["xp"] = $row["xp"];
 			$data[$i]["hour"] = $row["hour"];
@@ -164,6 +166,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 					username, 
 					level, 
 					spins, 
+					instance, 
 					device_id, 
 					route_num as route, 
 					total_exp as xp, 
@@ -185,6 +188,7 @@ function get_lorgnette_accounts($sqlType, $pdo, $conditions){
 					$data[$i]["device_id"] = $row["device_id"];
 					$data[$i]["username"] = $row["username"];
 					$data[$i]["spins"] = $row["spins"];
+					$data[$i]["instance"] = $row["instance"];
 					$data[$i]["route"] = $row["route"];
 					$data[$i]["xp"] = $row["xp"];
 					$data[$i]["hour"] = $row["hour"];

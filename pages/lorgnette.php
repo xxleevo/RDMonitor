@@ -208,6 +208,7 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			$device = $row['device_id']; 
 			$username = substr($row['username'], 0, 6) . "...";
 			$spins = $row['spins'];
+			$instance = $row['instance'];
 			$device_id = $row['device_id'];
 			$route = $row['route'];
 			$updated = $row['updated'];
@@ -240,12 +241,22 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 			if(($xpNeeded - $xp) > 0 && $estXpPerHour > 0){
 				$estFinish = ($xpNeeded - $xp)/($estXpPerHour);
 			}
+			//Estimated Finish
 			$estFinishHours = floor($estFinish);
 			$estFinishMinutes = ($estFinish*60)%60;
+			$estFinishString = $estFinishHours . "h " .  $estFinishMinutes  ."m";
 			
+			//Estimated Time passed
 			$estTime = $row['hour'] + $estFinish;
 			$estTimeHours = floor($estTime);
 			$estTimeMinutes = ($estTime*60)%60;
+			$estTimeString = $estTimeHours . "h " . $estTimeMinutes . "m";
+			
+			//Edge Case
+			if ($instance == "Test"){
+				$estFinishString = "None";
+				$estTimeString = "None";
+			}
 			//Build Table
 			echo "
 				<tr class='text-nowrap'>
@@ -259,8 +270,8 @@ echo "<div style='max-width:1440px;margin: 0 auto !important;float: none !import
 					<td data-title='route'>" . $route . "</td>
 					<td data-title='username'>" . $username . "</td>
 					<td data-title='hour'>" . $hour . "h " .  $minute  ."m" ."</td>
-					<td data-title='estfinish'>" .$estFinishHours . "h " .  $estFinishMinutes  ."m" ."</td>
-					<td data-title='esttime'>" . $estTimeHours . "h " . $estTimeMinutes . "m" . "</td>
+					<td data-title='estfinish'>" . $estFinishString ."</td>
+					<td data-title='esttime'>" . $estTimeString . "</td>
 					<td data-title='status'>" . $status . "</td>
 				</tr>
 			";
